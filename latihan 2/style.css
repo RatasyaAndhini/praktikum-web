@@ -1,0 +1,22 @@
+body {
+    background-color: #f0f8ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+#options .btn {
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+#options .btn:hover {
+    transform: scale(1.03);
+}
+
+#feedback {
+    font-size: 1.2em;
+}

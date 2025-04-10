@@ -1,0 +1,161 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Kuis Interaktif SMA</title>  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5b387, #ec8160);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .quiz-box {
+            background-color: #ffffffcc;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(8px);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #eba87c;
+            margin-bottom: 20px;
+        }
+
+        #question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-option {
+            margin: 8px 0;
+            transition: transform 0.2s, background-color 0.3s;
+            border-radius: 10px;
+        }
+
+        .btn-option:hover {
+            transform: scale(1.03);
+            background-color: #e3f2fd;
+        }
+
+        #feedback {
+            font-size: 18px;
+            margin-top: 15px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #nextBtn {
+            margin-top: 25px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-box">
+        <h1> Kuis Interaktif Pilihan Ganda</h1>
+        <div id="question"></div>
+        <div id="options" class="d-grid gap-2"></div>
+        <p id="feedback" class="fw-bold"></p>
+        <button id="nextBtn" class="btn btn-primary w-100" disabled>Soal Berikutnya</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Apa ibu kota Indonesia?",
+                options: ["Jakarta", "Surabaya", "Bandung", "Medan"],
+                correct: 0
+            },
+            {
+                question: "Siapa penemu lampu pijar?",
+                options: ["Nikola Tesla", "Thomas Edison", "Albert Einstein", "Alexander Graham Bell"],
+                correct: 1
+            },
+            {
+                question: "Planet terbesar di tata surya adalah?",
+                options: ["Bumi", "Mars", "Jupiter", "Venus"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let hasAnswered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+            feedbackEl.textContent = '';
+            hasAnswered = false;
+            nextBtn.disabled = true;
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline-dark btn-option';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(index);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(index) {
+            if (hasAnswered) return;
+
+            const q = questions[currentQuestion];
+            if (index === q.correct) {
+                feedbackEl.textContent = 'Jawaban Benar!';
+                feedbackEl.className = 'text-success fw-bold';
+            } else {
+                feedbackEl.textContent = 'Jawaban Salah!';
+                feedbackEl.className = 'text-danger fw-bold';
+            }
+
+            document.querySelectorAll('#options .btn').forEach(btn => btn.disabled = true);
+            hasAnswered = true;
+            nextBtn.disabled = false;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (!hasAnswered) return;
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                questionEl.textContent = 'Kuis Selesai!';
+                optionsEl.innerHTML = '';
+                feedbackEl.textContent = 'Klik untuk mengulang kuis';
+                feedbackEl.className = 'text-primary fw-bold';
+                nextBtn.textContent = 'Ulangi Kuis';
+                nextBtn.disabled = false;
+                nextBtn.onclick = () => location.reload();
+            }
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
